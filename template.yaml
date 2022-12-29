@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  label-detection-sora-cam-rekognition
+
+Parameters:
+  soracomAuthKeyId:
+    Type: String
+    Default: "keyId-xxxxxxx"
+  soracomAuthKey:
+    Type: String
+    Default: "secret-xxxxxx"
+  deviceId:
+    Type: String
+    Default: "XXXXXXXXXXXX"
+  rekognitionRegion:
+    Type: String
+    Default: "us-east-1"
+  targetLabelName:
+    Type: String
+    Default: "Person"
+  targetConfidence:
+    Type: String
+    Default: "90"
+  lineNotifyToken:
+    Type: String
+    Default: "replace it to your own token"
+
+Resources:
+  DetectionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: label-detection-sora-cam-rekognition
+      Timeout: 30
+      MemorySize: 256
+      CodeUri: label_detection_sora_cam_rekognition
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Environment:
+        Variables:
+          SORACOM_AUTH_KEY_ID: !Ref soracomAuthKeyId
+          SORACOM_AUTH_KEY: !Ref soracomAuthKey
+          DEVICE_ID: !Ref deviceId
+          LINE_NOTIFY_TOKEN: !Ref lineNotifyToken
+          REKOGNITION_REGION: !Ref rekognitionRegion
+          TARGET_LABEL_NAME: !Ref targetLabelName
+          TARGET_CONFIDENCE: !Ref targetConfidence
+      Architectures:
+        - x86_64
+      Layers:
+        - arn:aws:lambda:us-east-1:717257875195:layer:soracom-cli-0140:1
+      Role: !GetAtt DetectionFunctionRole.Arn
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Name: label-detection-sora-cam-rekognition-schedule
+            Schedule: cron(* * ? * * *)
+
+  DetectionFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "label-detection-sora-cam-rekognition-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "sts:AssumeRole"
+            Principal:
+              Service: lambda.amazonaws.com
+      Policies:
+        - PolicyName: "label-detection-sora-cam-rekognition-policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "rekognition:DetectLabels"
+                Resource:
+                  - "*"
