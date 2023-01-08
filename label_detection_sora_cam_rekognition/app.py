@@ -19,11 +19,11 @@ TARGET_CONFIDENCE = int(os.environ.get("TARGET_CONFIDENCE"))
 LINE_NOTIFY_TOKEN = os.environ.get("LINE_NOTIFY_TOKEN")
 
 
+
+
 def lambda_handler(event, context):
     print("Begin image export and download.")
-    image_url = soracom_cli.export_sora_cam_image_url(
-        device_id=DEVICE_ID, arg=SORACOM_CLI_ARG)
-    exported_image_bytes = download_image(image_url)
+    image_url = soracom_cli.export_sora_cam_image_url(        device_id=DEVICE_ID, arg=SORACOM_CLI_ARG)    exported_image_bytes = download_image(image_url)
     print("Image downloaded. Detect labels.")
     labels = amazon_rekognition.detect_labels(
         image_bytes=exported_image_bytes,
