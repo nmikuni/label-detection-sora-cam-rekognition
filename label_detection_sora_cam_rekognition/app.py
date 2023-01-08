@@ -30,9 +30,7 @@ def lambda_handler(event, context):
         rekognition_region=REKOGNITION_REGION)
     print("label list: " + str(labels))
     target_label = amazon_rekognition.find_target_label(
-        labels=labels,
-        target_label_name=TARGET_LABEL_NAME,
-        target_confidence=TARGET_CONFIDENCE)
+        labels=labels,         target_label_name=TARGET_LABEL_NAME,         target_confidence=TARGET_CONFIDENCE)
 
     if not target_label:
         print("There was no label with target name in the image."
