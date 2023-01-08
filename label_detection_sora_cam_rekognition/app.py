@@ -45,9 +45,11 @@ def lambda_handler(event, context):
         notification_image_bytes = amazon_rekognition.display_bounding_boxes(
             image_bytes=exported_image_bytes, label=target_label)
 
-    line_notify.notify_to_line(
+    print("Notify to LINE.")
+    message_text = 'Found ' + TARGET_LABEL_NAME.lower() + ' in the image.'
+    line_notify.notify_to_line_with_image(
         token=LINE_NOTIFY_TOKEN,
-        label_name=TARGET_LABEL_NAME,
+        message=message_text,
         image_bytes=notification_image_bytes)
     return
 
