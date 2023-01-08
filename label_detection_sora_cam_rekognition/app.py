@@ -36,7 +36,7 @@ def lambda_handler(event, context):
 
     if not target_label:
         print("There was no label with target name in the image."
-              "Finish the App.")
+              + "Finish the App.")
         return
 
     if target_label['Instances'] == []:
