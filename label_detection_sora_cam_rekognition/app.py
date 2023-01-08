@@ -55,7 +55,3 @@ def lambda_handler(event, context):
 def download_image(image_url):
     image_data_bytes = requests.get(image_url).content
     return image_data_bytes
-
-
-if __name__ == '__main__':
-    lambda_handler("hoo", "bar")
