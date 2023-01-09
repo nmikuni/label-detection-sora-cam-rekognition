@@ -26,13 +26,17 @@ def lambda_handler(event, context):
     exported_image_bytes = download_image(image_url)
     print("Image downloaded. Detect labels.")
     labels = amazon_rekognition.detect_labels(
-        image_bytes=exported_image_bytes, rekognition_region=REKOGNITION_REGION)
+        image_bytes=exported_image_bytes,
+        rekognition_region=REKOGNITION_REGION)
     print("label list: " + str(labels))
     target_label = amazon_rekognition.find_target_label(
-        labels=labels, target_label_name=TARGET_LABEL_NAME, target_confidence=TARGET_CONFIDENCE)
+        labels=labels,
+        target_label_name=TARGET_LABEL_NAME,
+        target_confidence=TARGET_CONFIDENCE)
 
     if not target_label:
-        print("There was no label with target name in the image. Finish the App.")
+        print("There was no label with target name in the image."
+              + "Finish the App.")
         return
 
     if target_label['Instances'] == []:
@@ -41,15 +45,15 @@ def lambda_handler(event, context):
         notification_image_bytes = amazon_rekognition.display_bounding_boxes(
             image_bytes=exported_image_bytes, label=target_label)
 
-    line_notify.notify_to_line(
-        token=LINE_NOTIFY_TOKEN, label_name=TARGET_LABEL_NAME, image_bytes=notification_image_bytes)
+    print("Notify to LINE.")
+    message_text = 'Found ' + TARGET_LABEL_NAME.lower() + ' in the image.'
+    line_notify.notify_to_line_with_image(
+        token=LINE_NOTIFY_TOKEN,
+        message=message_text,
+        image_bytes=notification_image_bytes)
     return
 
 
 def download_image(image_url):
     image_data_bytes = requests.get(image_url).content
     return image_data_bytes
-
-
-if __name__ == '__main__':
-    lambda_handler("hoo", "bar")
