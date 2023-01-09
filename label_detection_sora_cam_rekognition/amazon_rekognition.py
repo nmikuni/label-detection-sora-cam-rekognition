@@ -12,9 +12,10 @@ def detect_labels(image_bytes, rekognition_region):
 
 
 def find_target_label(labels, target_label_name, target_confidence):
-    """Returns a label with a specific name and high confidence from a list of labels"""
+    """Returns a label with a specific name and high confidence from a list"""
     for label in labels:
-        if label['Name'] == target_label_name and label['Confidence'] > target_confidence:
+        if label['Name'] == target_label_name and \
+                label['Confidence'] > target_confidence:
             print("Found " + target_label_name + " in the image")
             return label
     print("There was no " + target_label_name + " in the image")
