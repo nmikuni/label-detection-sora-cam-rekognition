@@ -62,7 +62,7 @@ class SoracomApiClient(object):
 
         try:
             response = requests.post(
-                url=url, headers=headers, data=payload, timeout=REQUESTS_TIMEOUT)
+                url=url, headers=headers, json=payload, timeout=REQUESTS_TIMEOUT)
         except Exception as error:
             print(error)
             raise error
