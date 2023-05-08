@@ -27,7 +27,7 @@ Soracom Cloud Camera Service (ソラカメ) の画像を SORACOM API で取得�
 
 ### アプリケーションのデプロイ
 
-1. `label-detection-sora-cam-rekognition` のデプロイのため、必要な環境変数を準備します。
+1. `sora-cam-label-detection-with-rekognition` のデプロイのため、必要な環境変数を準備します。
    - soracomAuthKeyId: SORACOM SAM ユーザーの認証キー ID
    - soracomAuthKey: SORACOM SAM ユーザーの認証キー
    - deviceId: ソラカメ対応カメラのデバイス ID
@@ -35,7 +35,7 @@ Soracom Cloud Camera Service (ソラカメ) の画像を SORACOM API で取得�
    - rekognitionRegion: Amazon Rekognition のリージョン
    - targetLabelName: 検知したいラベルの名前
    - targetConfidence: この信頼度以上の場合にラベルを検知します
-2. `label-detection-sora-cam-rekognition` をビルド・デプロイします
+2. `sora-cam-label-detection-with-rekognition` をビルド・デプロイします
    - `sam build` `sam deploy --guided --capabilities CAPABILITY_NAMED_IAM` を用います
 
 ### アプリケーションの削除
